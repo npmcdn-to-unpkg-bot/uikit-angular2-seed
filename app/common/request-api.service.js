@@ -14,19 +14,22 @@ require('rxjs/add/operator/map');
 require('rxjs/add/operator/catch');
 var RequestApi = (function () {
     function RequestApi(http) {
-        this.baseUrl = 'http://dev.time.ly:888/api/';
+        this.baseUrl = '';
         this.http = http;
     }
-    RequestApi.prototype.post = function (url, body, errorHandler) {
+    RequestApi.prototype.post = function (url, body, successHandler, errorHandler) {
         var jsonBody = JSON.stringify(body);
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         var options = new http_1.RequestOptions({ headers: headers });
         var obs = this.http.post(this.baseUrl + url, jsonBody, options)
             .map(function (response) { return response.json(); });
-        obs.subscribe(function (error) { return errorHandler(error); });
+        obs.subscribe(function (response) {
+            successHandler(response);
+        }, function (error) {
+            alert(error._body);
+            var obj = JSON.parse(error._body);
+        });
         return obs;
-    };
-    RequestApi.prototype.translateError = function (error) {
     };
     RequestApi = __decorate([
         core_1.Injectable(), 

@@ -20,11 +20,7 @@ var AuthenticationService = (function () {
             email: email,
             password: password
         };
-        this.api.post(this.authenticationUrl, requestBody).subscribe(function (response) {
-            successHandler(response);
-        }, function (error) {
-            errorHandler(error);
-        });
+        this.api.post(this.authenticationUrl, requestBody, successHandler, errorHandler);
     };
     AuthenticationService = __decorate([
         core_1.Injectable(), 

@@ -13,17 +13,22 @@ export class RequestApi {
 		this.http = http;
 	}
 
-	public post(url, body, errorHandler) : Observable<Object> {
+	public post(url, body, successHandler, errorHandler) : Observable<Object> {
 		var jsonBody = JSON.stringify(body);
 		var headers = new Headers({ 'Content-Type': 'application/json' });
 		var options = new RequestOptions({ headers: headers });
 		var obs : Observable<Object> = this.http.post(this.baseUrl + url, jsonBody, options)
 			.map(response => response.json());
-		obs.subscribe(error => errorHandler(error));
+		obs.subscribe(
+			function(response) {
+				successHandler(response);
+			},
+			function(error) {
+				alert(error._body);
+				var obj = JSON.parse(error._body);
+			}
+		);
 		return obs;
 	}
 
-	public translateError(error) {
-		
-	}
 }
