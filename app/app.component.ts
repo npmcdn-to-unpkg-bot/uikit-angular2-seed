@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ROUTER_DIRECTIVES, Routes, Router } from '@angular/router';
 
-import { LoginComponent } from './login.component';
-import { HomeComponent } from './home.component';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
 
 @Component({
 	selector: 'my-app',

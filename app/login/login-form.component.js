@@ -10,23 +10,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var common_1 = require('@angular/common');
-var utils_1 = require('./utils');
+var router_1 = require('@angular/router');
+var utils_1 = require('../common/utils');
+var authentication_service_1 = require('./authentication.service');
 var LoginFormComponent = (function () {
-    function LoginFormComponent(formBuilder) {
+    function LoginFormComponent(formBuilder, router, authService) {
         this.errorMessage = null;
         this.loginForm = formBuilder.group({
             'email': ['', common_1.Validators.required],
             'password': ['', common_1.Validators.required]
         });
+        this.storage = localStorage;
+        this.router = router;
+        this.authService = authService;
     }
+    LoginFormComponent.prototype.hideMessage = function () {
+        this.errorMessage = null;
+        return false;
+    };
     // submitted = false;
     LoginFormComponent.prototype.login = function () {
-        if (!this.loginForm.valid) {
-            utils_1.Utils.setFormDirty(this.loginForm);
-            this.errorMessage = 'Todos os campos com * são obrigatórios';
+        if (this.loginForm.valid) {
+            this.authService.authenticate(this.loginForm.value.email, this.loginForm.value.password, function (response) {
+                alert('response 2: ' + response.body);
+            }, function (error) {
+                alert('error 3: ' + error._body);
+            });
         }
         else {
-            this.errorMessage = 'Campo validos';
+            utils_1.Utils.setFormDirty(this.loginForm);
+            this.errorMessage = 'Todos os campos com * são obrigatórios';
         }
         // this.submitted = true; 
     };
@@ -35,7 +48,7 @@ var LoginFormComponent = (function () {
             selector: 'login-form',
             templateUrl: '/view/registration/login-form.view.html'
         }), 
-        __metadata('design:paramtypes', [common_1.FormBuilder])
+        __metadata('design:paramtypes', [common_1.FormBuilder, router_1.Router, authentication_service_1.AuthenticationService])
     ], LoginFormComponent);
     return LoginFormComponent;
 }());
